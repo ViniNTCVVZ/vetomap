@@ -9,19 +9,21 @@ export enum Action {
 }
 
 export enum MapAction {
+    None,
     Ban,
     Pick,
     Random
 }
 
 export enum TeamSide {
+    None,
     A,
     B
 }
 
 export class Team {
-    side: TeamSide;
-    name: string;
+    side: TeamSide = TeamSide.None;
+    name: string = '';
 
     constructor(side: TeamSide, name: string) {
         this.side = side;
@@ -30,8 +32,8 @@ export class Team {
 }
 
 export class Map {
-    id: number;
-    name: string;
+    id: number = 0;
+    name: string = '';
 
     constructor(id: number, name: string) {
         this.id = id;
@@ -39,19 +41,41 @@ export class Map {
     }
 }
 
+export class MapActionResult {
+    map: Map = new Map(0, '');
+    action: MapAction = MapAction.None;
+    side: TeamSide = TeamSide.None;
+}
+
 export class Room {
+    clients: Client[] = [];
+    token: string = '';
     remaining_maps: Map[] = [];
-    picked_maps: Map[] = [];
-    actions: MapAction[];
+    actions: MapActionResult[] = [];
+
+    isValid(): boolean {
+        return this.remaining_maps.length > 0 && this.remaining_maps.length == this.actions.length;
+    }
 }
 
 export class Client extends WebSocket {
+    id: string;
     isAlive: boolean = true;
-    captain: number = 0;
+    captain: TeamSide = TeamSide.None;
     room: Room = new Room();
 }
 
 export class Message {
     action: Action = Action.None;
     data: Room | Map | Team | any;
+}
+
+export class Response {
+    error: string = '';
+    data: Room;
+
+    constructor(data: any, error: string = '') {
+        this.error = error;
+        this.data = data;
+    }
 }
