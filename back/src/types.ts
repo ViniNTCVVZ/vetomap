@@ -32,17 +32,15 @@ export class Team {
 }
 
 export class Map {
-    id: number = 0;
     name: string = '';
 
-    constructor(id: number, name: string) {
-        this.id = id;
+    constructor(name: string) {
         this.name = name;
     }
 }
 
 export class MapActionResult {
-    map: Map = new Map(0, '');
+    map: Map = new Map('');
     action: MapAction = MapAction.None;
     side: TeamSide = TeamSide.None;
 }

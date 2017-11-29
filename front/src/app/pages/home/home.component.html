@@ -1,0 +1,41 @@
+<form [formGroup]="roomForm">
+
+  <div class="form-control">
+    <mat-form-field class="full">
+      <input matInput placeholder="Name of team 1" formControlName="team1">
+    </mat-form-field>
+    <div class="error" *ngIf="roomForm.get('team1').invalid">
+      The team name is required
+    </div>
+  </div>
+
+  <div class="form-control">
+    <mat-form-field class="full">
+      <input matInput placeholder="Name of team 2" formControlName="team2">
+    </mat-form-field>
+    <div class="error" *ngIf="roomForm.get('team2').invalid">
+      The team name is required
+    </div>
+  </div>
+
+  <div class="form-control">
+    <mat-form-field class="full">
+      <mat-select placeholder="Format" formControlName="format">
+        <mat-option *ngFor="let format of formats" [value]="format.value">
+          {{ format.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-control">
+    <label>Map list</label>
+    <div class="mapList">
+      <button (click)="switchMap(map)" *ngFor="let map of mapList" [ngClass]="{ 'picked': map.picked }" mat-button><img [src]="'/assets/' + map.name + '.png'" /></button>
+    </div>
+    <div class="error" *ngIf="!validMapList()">
+      You have to choose at least {{ roomForm.get('format').value }} maps
+    </div>
+  </div>
+  
+</form>

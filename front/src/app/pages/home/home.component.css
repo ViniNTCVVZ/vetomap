@@ -1,0 +1,25 @@
+.form-control {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.mapList button {
+    margin: 10px;
+    opacity: 0.5;
+}
+
+.mapList button.picked {
+    opacity: 1;
+}
+
+.mapList button img {
+    max-height: 100px;
+}
+
+.full {
+    width: 100%;
+}
+
+.error {
+    color: #F00;
+}

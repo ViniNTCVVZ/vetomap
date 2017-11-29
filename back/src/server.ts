@@ -4,7 +4,6 @@ import * as WebSocket from 'ws';
 import * as crypto from "crypto";
 import { Room, Client, Map, Message, Response, Action, TeamSide, MapAction } from './types';
 
-
 // global rooms (no database). We have to be careful about memory leak / grow.
 let rooms: Room[] = [];
 
@@ -26,18 +25,6 @@ function parse(str: string): Message {
 function token(): string {
     return crypto.randomBytes(64).toString('hex');
 }
-
-// map list
-const maps: Map[] = [
-    new Map(1, 'cache'),
-    new Map(2, 'cobblestone'),
-    new Map(3, 'dust2'),
-    new Map(4, 'inferno'),
-    new Map(5, 'mirage'),
-    new Map(6, 'nuke'),
-    new Map(7, 'overpass'),
-    new Map(8, 'train')
-];
 
 // initialize express application
 const app = express();
@@ -127,29 +114,29 @@ wss.on('connection', (ws: Client) => {
                     } else {
                         let room = rooms[room_index];
                         // is there any action available
-                        let action_index = room.actions.findIndex(x => x.map.id === 0);
+                        let action_index = room.actions.findIndex(x => x.map.name === '');
                         if (action_index < 0) {
                             ws.send(new Response(null, "This map has already been voted"));
                         } else {
                             let action = room.actions[action_index];
-                            let picked_map = room.remaining_maps.find(x => x.id === map.id);
+                            let picked_map = room.remaining_maps.find(x => x.name === map.name);
                             if (picked_map) {
                                 action.map = picked_map;
-                                room.remaining_maps.splice(room.remaining_maps.findIndex(x => x.id === map.id), 1);
+                                room.remaining_maps.splice(room.remaining_maps.findIndex(x => x.name === map.name), 1);
 
                                 // picking random map if next_action is random
-                                let next_action = room.actions.find(x => x.map.id === 0);
+                                let next_action = room.actions.find(x => x.map.name === '');
                                 while(next_action && next_action.action === MapAction.Random) {
                                     const random_map = room.remaining_maps[Math.floor(Math.random()*room.remaining_maps.length)];
                                     next_action.map = random_map;
-                                    next_action = room.actions.find(x => x.map.id === 0);
+                                    next_action = room.actions.find(x => x.map.name === '');
                                 }
                                 
                                 // send updated room for all clients
                                 wss.clients.forEach( client => {
                                     client.send(new Response(room));
                                 })
-                                
+
                                 // removing room if no more action needed
                                 if (!next_action) {
                                     rooms.splice(room_index, 1);
