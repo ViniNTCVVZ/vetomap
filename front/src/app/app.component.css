@@ -7,13 +7,23 @@
 }
 
 header {
-    background: url(/assets/logo.png) 10px center no-repeat #272e6f;
+    background: url(/assets/logo.png) 10px center no-repeat, url(/assets/pogchamp.png) bottom right no-repeat;
+    background-color: #272e6f;
     margin-bottom: 10px;
     text-align: center;
+    position: relative
 }
 
-header h1{
+header h1, header h2{
     color: #FFF;
+    font-weight: 400;
+}
+
+header img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    max-height: 184px;
 }
 
 footer{

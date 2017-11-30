@@ -9,3 +9,32 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
+.error{
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 3px;
+    background: rgb(214, 59, 59);
+    color: #FFF;
+    font-size: 14px;
+}
+
+.message{
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 3px;
+    background: rgb(18, 88, 121);
+    color: #FFF;
+    font-size: 14px;
+}
+
+.full {
+    width: 100%;
+}
+
+button.btn-success{
+    background: rgb(0, 109, 27);
+    color: #FFF;
+}

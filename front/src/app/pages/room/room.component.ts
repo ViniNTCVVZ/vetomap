@@ -6,8 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./room.component.css']
 })
 export class RoomComponent implements OnInit {
+  hasbeencopied: boolean = false;
+  link: string = '';
 
-  constructor() { }
+  constructor() { 
+    this.link = window.location.href;
+  }
 
   ngOnInit() {
   }

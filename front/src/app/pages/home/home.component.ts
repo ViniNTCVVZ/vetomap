@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ApiService } from '../../services/api.service';
+import { AppService } from '../../services/app.service';
 import { Map, MapAction, Format, Mode, Room, MapActionResult, TeamSide } from '../../types/types';
 
 @Component({
@@ -16,7 +17,7 @@ export class HomeComponent implements OnInit {
   currentFormat: Format;
   currentMode: Mode;
 
-  constructor(private fb: FormBuilder, private api: ApiService, private router: Router) { 
+  constructor(private fb: FormBuilder, private api: ApiService, private app: AppService, private router: Router) { 
     this.currentFormat = this.api.formats.find(x => x.value === this.api.defaultFormat);
     this.currentMode = this.currentFormat.modes[0];
     this.roomForm = this.fb.group({
@@ -61,7 +62,7 @@ export class HomeComponent implements OnInit {
           this.router.navigate(['/room/' + room.token]);
         })
         .catch( err => {
-
+          this.app.onError.next(err);
         });
     }
   }

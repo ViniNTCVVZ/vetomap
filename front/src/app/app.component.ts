@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material';
+
+import { AppService } from './services/app.service';
+import { DialogComponent } from './dialog/dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +10,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  dialogRef: any;
+
+  constructor(private dialog: MatDialog, private app: AppService) { 
+    this.app.onError.subscribe( err => {
+      this.dialogRef = this.dialog.open(DialogComponent, {
+        width: '400px',
+        data: { error: err, message: false }
+      });
+    });
+  }
+
+  openDialog(): void {
+    
+  }
 }

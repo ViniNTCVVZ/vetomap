@@ -103,19 +103,18 @@ export class ApiService {
     return new Promise( (resolve, reject) => {
       this.ws = new WebSocket(this.api_url);
       this.ws.onerror = (error) => {
-        console.log(error);
-        reject(error);
+        reject("Unable to reach the server. Service unavailable. You can't create new room for map veto right now. I'm sorry :'(");
         this.ws.onerror = this.onError;
-      };
-      this.ws.onmessage = (message: MessageEvent) => {
-        const res: Response = JSON.parse(message.data);
-        resolve(res.data);
-        this.ws.onmessage = this.onMessage;
       };
       this.ws.onopen = () => {
         let message = new Message(Action.Create, room);
         this.ws.send(JSON.stringify(message));
       }
+      this.ws.onmessage = (message: MessageEvent) => {
+        const res: Response = JSON.parse(message.data);
+        resolve(res.data);
+        this.ws.onmessage = this.onMessage;
+      };
     });
   }
 

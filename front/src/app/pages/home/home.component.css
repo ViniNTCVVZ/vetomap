@@ -24,10 +24,6 @@
     display: block;
 }
 
-.full {
-    width: 100%;
-}
-
 .error {
     color: #F00;
 }
