@@ -28,7 +28,7 @@
       <div class="form-control">
         <mat-form-field class="full">
           <mat-select placeholder="Format" formControlName="format">
-            <mat-option *ngFor="let format of formats" [value]="format.value">
+            <mat-option *ngFor="let format of api.formats" [value]="format.value">
               {{ format.name }}
             </mat-option>
           </mat-select>
@@ -64,7 +64,7 @@
   <div class="form-control">
     <label>Map list</label>
     <div class="mapList">
-      <button (click)="switchMap(map)" *ngFor="let map of mapList" [ngClass]="{ 'picked': map.picked }" mat-button>
+      <button type="button" (click)="switchMap(map)" *ngFor="let map of api.mapList" [ngClass]="{ 'picked': map.picked }" mat-button>
         <img [src]="'/assets/' + map.name + '.png'" />
         <label>{{ map.name }}</label>
       </button>

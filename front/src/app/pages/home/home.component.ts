@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   currentFormat: Format;
   currentMode: Mode;
 
-  constructor(private fb: FormBuilder, private api: ApiService, private app: AppService, private router: Router) { 
+  constructor(public api: ApiService, private fb: FormBuilder, private app: AppService, private router: Router) { 
     this.currentFormat = this.api.formats.find(x => x.value === this.api.defaultFormat);
     this.currentMode = this.currentFormat.modes[0];
     this.roomForm = this.fb.group({
