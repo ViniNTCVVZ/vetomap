@@ -1,0 +1,12 @@
+#notfound404{
+    text-align: center;
+}
+
+#notfound404 button, #notfound404 img{
+    display: block;
+    margin: auto;
+}
+
+#notfound404 img {
+    margin: 20px auto;
+}

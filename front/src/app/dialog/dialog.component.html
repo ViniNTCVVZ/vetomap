@@ -1,11 +1,7 @@
 <div mat-dialog-content>
-  <div class="message" *ngIf="data.message; else error">
-    {{ data.message}}
-  </div>
+  <div class="message" *ngIf="data.message; else error" [innerHTML]="data.message | nl2br"></div>
   <ng-template #error>
-    <div class="error">
-      {{ data.error}}
-    </div>
+    <div class="error" [innerHTML]="data.error | nl2br"></div>
   </ng-template>
 </div>
 <div mat-dialog-actions>

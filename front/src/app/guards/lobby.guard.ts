@@ -14,7 +14,7 @@ export class LobbyGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.api.joinLobby(next.params.token)
     .catch( err => {
-      this.app.onError.next(`The lobby you try to access seems to be unavailable. 
+      this.app.onError.next(`The lobby you tried to access seems to be unreachable.
       You have been redirected to the homepage.`);
       this.router.navigate(['']);
       return false;

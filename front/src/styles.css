@@ -8,10 +8,11 @@ body {
     background: url("/assets/background.jpg") center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    color: #FFF;
 }
 
-*{
-    color: #FFF !important;
+a {
+    color: #FFF;
 }
 
 .error{
@@ -41,4 +42,12 @@ body {
 button.btn-success{
     background: rgb(0, 109, 27);
     color: #FFF;
+}
+
+h1 {
+    font-size: 25px
+}
+
+h2 {
+    font-size: 20px
 }

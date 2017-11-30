@@ -15,7 +15,7 @@ export class AppComponent {
   constructor(private dialog: MatDialog, private app: AppService) { 
     this.app.onError.subscribe( err => {
       this.dialogRef = this.dialog.open(DialogComponent, {
-        width: '400px',
+        width: '600px',
         data: { error: err, message: false }
       });
     });
