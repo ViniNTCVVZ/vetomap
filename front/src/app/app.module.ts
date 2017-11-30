@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';
-
+import { ApiService } from './services/api.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RoomComponent } from './pages/room/room.component';
@@ -25,6 +25,7 @@ import { RoomComponent } from './pages/room/room.component';
     HomeComponent,
     RoomComponent
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  providers: [ApiService]
 })
 export class AppModule { }

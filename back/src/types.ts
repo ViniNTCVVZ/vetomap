@@ -9,10 +9,10 @@ export enum Action {
 }
 
 export enum MapAction {
-    None,
-    Ban,
-    Pick,
-    Random
+    None = "NONE",
+    Ban = "BAN",
+    Pick = "PICK",
+    Random = "RANDOM"
 }
 
 export enum TeamSide {
@@ -22,58 +22,63 @@ export enum TeamSide {
 }
 
 export class Team {
-    side: TeamSide = TeamSide.None;
-    name: string = '';
-
-    constructor(side: TeamSide, name: string) {
-        this.side = side;
-        this.name = name;
-    }
+    constructor(
+        public side: TeamSide = TeamSide.None, 
+        public name: string = ''
+    ) {}
 }
 
 export class Map {
-    name: string = '';
-
-    constructor(name: string) {
-        this.name = name;
-    }
+    constructor(
+        public name: string = '',
+        public picked: boolean = false
+    ){}
 }
 
 export class MapActionResult {
-    map: Map = new Map('');
-    action: MapAction = MapAction.None;
-    side: TeamSide = TeamSide.None;
+    constructor(
+        public map: Map = new Map(),
+        public action: MapAction = MapAction.None,
+        public side: TeamSide = TeamSide.None
+    ){}
 }
 
 export class Room {
-    clients: Client[] = [];
-    token: string = '';
-    remaining_maps: Map[] = [];
-    actions: MapActionResult[] = [];
+    constructor(
+        public token: string = '',
+        public remaining_maps: Map[] = [],
+        public actions: MapActionResult[] = [],
+        public clients: Client[] = []
+    ){}
 
     isValid(): boolean {
         return this.remaining_maps.length > 0 && this.remaining_maps.length == this.actions.length;
     }
 }
 
-export class Client extends WebSocket {
-    id: string;
-    isAlive: boolean = true;
-    captain: TeamSide = TeamSide.None;
-    room: Room = new Room();
-}
-
 export class Message {
-    action: Action = Action.None;
-    data: Room | Map | Team | any;
+    constructor(
+        public action: Action = Action.None,
+        public data: Room | Map | Team | any
+    ){}
 }
 
 export class Response {
-    error: string = '';
-    data: Room;
+    public data: Room;
+    public error: string = '';
 
-    constructor(data: any, error: string = '') {
+    constructor(data: Room | any, error: string = ''){
+        if (data) {
+            this.data = new Room(data.token, data.remaining_maps, data.actions);
+        }
         this.error = error;
-        this.data = data;
     }
+}
+
+export class Client {
+    constructor(
+        public id: string = '',
+        public isAlive: boolean = true,
+        public captain: TeamSide = TeamSide.None
+    ){}
 }

@@ -1,0 +1,21 @@
+#container, footer, header {
+    max-width: 1280px;
+    margin: auto;
+    background: url('/assets/repeat.png') repeat;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+header {
+    background: url(/assets/logo.png) 10px center no-repeat #272e6f;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+header h1{
+    color: #FFF;
+}
+
+footer{
+    margin-top: 10px;
+}

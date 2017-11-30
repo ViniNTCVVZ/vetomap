@@ -1,41 +1,81 @@
-<form [formGroup]="roomForm">
+<form [formGroup]="roomForm" (ngSubmit)="createRoom()">
 
-  <div class="form-control">
-    <mat-form-field class="full">
-      <input matInput placeholder="Name of team 1" formControlName="team1">
-    </mat-form-field>
-    <div class="error" *ngIf="roomForm.get('team1').invalid">
-      The team name is required
+  <div fxLayout="row" layout-wrap>
+    <div fxFlex="50">
+      <div class="form-control">
+        <mat-form-field class="full">
+          <input matInput placeholder="Name of team 1" formControlName="team1">
+        </mat-form-field>
+        <div class="error" *ngIf="roomForm.get('team1').invalid">
+          The team name is required
+        </div>
+      </div>
+    </div>
+    <div fxFlex="50">
+      <div class="form-control">
+        <mat-form-field class="full">
+          <input matInput placeholder="Name of team 2" formControlName="team2">
+        </mat-form-field>
+        <div class="error" *ngIf="roomForm.get('team2').invalid">
+          The team name is required
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="form-control">
-    <mat-form-field class="full">
-      <input matInput placeholder="Name of team 2" formControlName="team2">
-    </mat-form-field>
-    <div class="error" *ngIf="roomForm.get('team2').invalid">
-      The team name is required
+  <div fxLayout="row" layout-wrap>
+    <div fxFlex="50">
+      <div class="form-control">
+        <mat-form-field class="full">
+          <mat-select placeholder="Format" formControlName="format">
+            <mat-option *ngFor="let format of formats" [value]="format.value">
+              {{ format.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxFlex="50">
+      <div class="form-control">
+        <mat-form-field class="full">
+          <mat-select placeholder="Mode" formControlName="mode">
+            <mat-option *ngFor="let mode of currentFormat.modes" [value]="mode">
+              {{ mode.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        </div>
     </div>
   </div>
 
-  <div class="form-control">
-    <mat-form-field class="full">
-      <mat-select placeholder="Format" formControlName="format">
-        <mat-option *ngFor="let format of formats" [value]="format.value">
-          {{ format.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="form-control" *ngIf="currentMode.actions.length > 0">
+    <label>Preview</label>
+    <div class="preview">
+      <div *ngFor="let action of currentMode.actions; let i = index;" [ngClass]="{ 'picked': action === 'PICK', 'banned': action === 'BAN', 'random': action === 'RANDOM'}">
+        <label *ngIf="action === 'RANDOM'; else teamchoose">{{ action }}</label>
+        <ng-template #teamchoose>
+            <label *ngIf="i%2 === 0; else teamB">Team 1 {{ action }}</label>
+            <ng-template #teamB><label>Team 2 {{ action }}</label></ng-template>
+        </ng-template>
+      </div>
+    </div>
   </div>
 
   <div class="form-control">
     <label>Map list</label>
     <div class="mapList">
-      <button (click)="switchMap(map)" *ngFor="let map of mapList" [ngClass]="{ 'picked': map.picked }" mat-button><img [src]="'/assets/' + map.name + '.png'" /></button>
+      <button (click)="switchMap(map)" *ngFor="let map of mapList" [ngClass]="{ 'picked': map.picked }" mat-button>
+        <img [src]="'/assets/' + map.name + '.png'" />
+        <label>{{ map.name }}</label>
+      </button>
     </div>
     <div class="error" *ngIf="!validMapList()">
       You have to choose at least {{ roomForm.get('format').value }} maps
     </div>
   </div>
-  
+
+  <div class="form-control">
+    <button class="full" [disabled]="!valid()" mat-raised-button color="primary" type="submit">Create a room for maps VETO</button>
+  </div>
+
 </form>

@@ -7,10 +7,10 @@ export enum Action {
 }
 
 export enum MapAction {
-    None,
-    Ban,
-    Pick,
-    Random
+    None = "NONE",
+    Ban = "BAN",
+    Pick = "PICK",
+    Random = "RANDOM"
 }
 
 export enum TeamSide {
