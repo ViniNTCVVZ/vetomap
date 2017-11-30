@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   }
 
   validMapList(): boolean {
-    return this.api.mapList.filter(x => x.picked).length >= +this.roomForm.get('format').value;
+    return !this.currentMode || this.api.mapList.filter(x => x.picked).length >= this.currentMode.actions.length;
   }
 
   switchMap(map: Map): void {

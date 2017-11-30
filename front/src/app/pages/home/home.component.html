@@ -70,7 +70,7 @@
       </button>
     </div>
     <div class="error" *ngIf="!validMapList()">
-      You have to choose at least {{ roomForm.get('format').value }} maps
+      You have to choose at least {{ currentMode?.actions.length }} maps
     </div>
   </div>
 
