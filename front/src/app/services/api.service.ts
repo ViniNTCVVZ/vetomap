@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Room, Map, Format, Mode, MapAction, Message, Action, Response } from '../types/types';
+import { Lobby, Map, Format, Mode, MapAction, Message, Action, Response } from '../types/types';
 
 @Injectable()
 export class ApiService {
@@ -94,20 +94,20 @@ export class ApiService {
   ];
 
   api_url: string = 'ws://localhost:8999';
-  current_room: Room = null;
+  current_lobby: Lobby = null;
   ws: WebSocket;
 
   constructor() { }
 
-  createRoom(room: Room): Promise<Room> {
+  createLobby(lobby: Lobby): Promise<Lobby> {
     return new Promise( (resolve, reject) => {
       this.ws = new WebSocket(this.api_url);
       this.ws.onerror = (error) => {
-        reject("Unable to reach the server. Service unavailable. You can't create new room for map veto right now. I'm sorry :'(");
+        reject("Unable to reach the server. Service unavailable. You can't create new lobby for map veto right now. I'm sorry :'(");
         this.ws.onerror = this.onError;
       };
       this.ws.onopen = () => {
-        let message = new Message(Action.Create, room);
+        let message = new Message(Action.Create, lobby);
         this.ws.send(JSON.stringify(message));
       }
       this.ws.onmessage = (message: MessageEvent) => {
@@ -118,7 +118,7 @@ export class ApiService {
     });
   }
 
-  joinRoom(token: string): Promise<boolean> {
+  joinLobby(token: string): Promise<boolean> {
     return new Promise( (resolve, reject) => {
       const message = new Message(Action.Join, token);
       if (!this.ws) {
@@ -139,7 +139,7 @@ export class ApiService {
         if (res.error) {
           reject(res.error);
         } else {
-          this.current_room = res.data;
+          this.current_lobby = res.data;
           this.ws.onmessage = this.onMessage;
           resolve(true);
         }

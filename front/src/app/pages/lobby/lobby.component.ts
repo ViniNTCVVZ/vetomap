@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-room',
-  templateUrl: './room.component.html',
-  styleUrls: ['./room.component.css']
+  selector: 'app-lobby',
+  templateUrl: './lobby.component.html',
+  styleUrls: ['./lobby.component.css']
 })
-export class RoomComponent implements OnInit {
+export class LobbyComponent implements OnInit {
   hasbeencopied: boolean = false;
   link: string = '';
 

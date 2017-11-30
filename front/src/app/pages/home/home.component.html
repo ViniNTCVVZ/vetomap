@@ -1,4 +1,4 @@
-<form [formGroup]="roomForm" (ngSubmit)="createRoom()">
+<form [formGroup]="lobbyForm" (ngSubmit)="createLobby()">
 
   <div fxLayout="row" layout-wrap>
     <div fxFlex="50">
@@ -6,7 +6,7 @@
         <mat-form-field class="full">
           <input matInput placeholder="Name of team 1" formControlName="team1">
         </mat-form-field>
-        <div class="error" *ngIf="roomForm.get('team1').invalid">
+        <div class="error" *ngIf="lobbyForm.get('team1').invalid">
           The team name is required
         </div>
       </div>
@@ -16,7 +16,7 @@
         <mat-form-field class="full">
           <input matInput placeholder="Name of team 2" formControlName="team2">
         </mat-form-field>
-        <div class="error" *ngIf="roomForm.get('team2').invalid">
+        <div class="error" *ngIf="lobbyForm.get('team2').invalid">
           The team name is required
         </div>
       </div>
@@ -75,7 +75,7 @@
   </div>
 
   <div class="form-control">
-    <button class="full" [disabled]="!valid()" mat-raised-button color="primary" type="submit">Create a room for map veto</button>
+    <button class="full" [disabled]="!valid()" mat-raised-button color="primary" type="submit">Create a lobby for map veto</button>
   </div>
 
 </form>

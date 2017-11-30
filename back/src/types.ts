@@ -43,7 +43,7 @@ export class MapActionResult {
     ){}
 }
 
-export class Room {
+export class Lobby {
     constructor(
         public token: string = '',
         public remaining_maps: Map[] = [],
@@ -59,17 +59,17 @@ export class Room {
 export class Message {
     constructor(
         public action: Action = Action.None,
-        public data: Room | Map | Team | any
+        public data: Lobby | Map | Team | any
     ){}
 }
 
 export class Response {
-    public data: Room;
+    public data: Lobby;
     public error: string = '';
 
-    constructor(data: Room | any, error: string = ''){
+    constructor(data: Lobby | any, error: string = ''){
         if (data) {
-            this.data = new Room(data.token, data.remaining_maps, data.actions);
+            this.data = new Lobby(data.token, data.remaining_maps, data.actions);
         }
         this.error = error;
     }

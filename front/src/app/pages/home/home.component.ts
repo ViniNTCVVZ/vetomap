@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { ApiService } from '../../services/api.service';
 import { AppService } from '../../services/app.service';
-import { Map, MapAction, Format, Mode, Room, MapActionResult, TeamSide } from '../../types/types';
+import { Map, MapAction, Format, Mode, Lobby, MapActionResult, TeamSide } from '../../types/types';
 
 @Component({
   selector: 'app-home',
@@ -13,14 +13,14 @@ import { Map, MapAction, Format, Mode, Room, MapActionResult, TeamSide } from '.
 })
 export class HomeComponent implements OnInit {
 
-  roomForm: FormGroup;
+  lobbyForm: FormGroup;
   currentFormat: Format;
   currentMode: Mode;
 
   constructor(public api: ApiService, private fb: FormBuilder, private app: AppService, private router: Router) { 
     this.currentFormat = this.api.formats.find(x => x.value === this.api.defaultFormat);
     this.currentMode = this.currentFormat.modes[0];
-    this.roomForm = this.fb.group({
+    this.lobbyForm = this.fb.group({
       team1: ['Team A', Validators.required],
       team2: ['Team B', Validators.required],
       format: [this.api.defaultFormat, Validators.required],
@@ -29,15 +29,15 @@ export class HomeComponent implements OnInit {
   }
 
   valid(): boolean {
-    return this.roomForm.valid && this.validMapList();
+    return this.lobbyForm.valid && this.validMapList();
   }
 
   ngOnInit() {
-    this.roomForm.get('format').valueChanges.subscribe( (value: number) => {
+    this.lobbyForm.get('format').valueChanges.subscribe( (value: number) => {
       this.currentFormat = this.api.formats.find(x => x.value === value);
       this.currentMode = new Mode();
     });
-    this.roomForm.get('mode').valueChanges.subscribe( (mode: Mode) => {
+    this.lobbyForm.get('mode').valueChanges.subscribe( (mode: Mode) => {
       this.currentMode = mode;
     });
   }
@@ -51,15 +51,15 @@ export class HomeComponent implements OnInit {
     concerned_map.picked = !concerned_map.picked;
   }
 
-  createRoom() {
+  createLobby() {
     if (this.valid()) {
-      let new_room = new Room();
-      new_room.remaining_maps = this.api.mapList.filter(x => x.picked);
-      new_room.actions = this.currentMode.actions.map((x, indice) => new MapActionResult(null, x, (indice%2 === 0 ? TeamSide.A : TeamSide.B)));
-      this.api.createRoom(new_room)
-        .then( (room: Room) => {
-          console.log(room);
-          this.router.navigate(['/room/' + room.token]);
+      let new_lobby = new Lobby();
+      new_lobby.remaining_maps = this.api.mapList.filter(x => x.picked);
+      new_lobby.actions = this.currentMode.actions.map((x, indice) => new MapActionResult(null, x, (indice%2 === 0 ? TeamSide.A : TeamSide.B)));
+      this.api.createLobby(new_lobby)
+        .then( (lobby: Lobby) => {
+          console.log(lobby);
+          this.router.navigate(['/lobby/' + lobby.token]);
         })
         .catch( err => {
           this.app.onError.next(err);

@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
-import { RoomComponent } from './pages/room/room.component';
+import { LobbyComponent } from './pages/lobby/lobby.component';
 import { DialogComponent } from './dialog/dialog.component';
 
 
@@ -26,7 +26,7 @@ import { DialogComponent } from './dialog/dialog.component';
   declarations: [
     AppComponent, 
     HomeComponent,
-    RoomComponent,
+    LobbyComponent,
     DialogComponent
   ],
   bootstrap: [AppComponent],

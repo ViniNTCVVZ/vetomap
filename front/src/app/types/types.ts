@@ -56,7 +56,7 @@ export class MapActionResult {
     ){}
 }
 
-export class Room {
+export class Lobby {
     constructor(
         public token: string = '',
         public remaining_maps: Map[] = [],
@@ -67,11 +67,11 @@ export class Room {
 export class Message {
     constructor(
         public action: Action = Action.None,
-        public data: Room | Map | Team | any
+        public data: Lobby | Map | Team | any
     ){}
 }
 
 export interface Response {
     error: string;
-    data: Room;
+    data: Lobby;
 }
