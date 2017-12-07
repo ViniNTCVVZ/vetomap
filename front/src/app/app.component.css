@@ -7,8 +7,7 @@
 }
 
 header {
-    background: url(/assets/logo.png) 10px center no-repeat, url(/assets/pogchamp.png) bottom right no-repeat;
-    background-color: #272e6f;
+    background: url(/assets/logo.png) 10px center no-repeat, url(/assets/pogchamp.png) bottom right no-repeat, url(/assets/repeat.png) repeat;
     margin-bottom: 10px;
     text-align: center;
     position: relative;

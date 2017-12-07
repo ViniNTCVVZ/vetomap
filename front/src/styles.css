@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/purple-green.css";
 
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono');
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -44,12 +44,19 @@ button.btn-success{
     color: #FFF;
 }
 
-h1 {
-    font-size: 25px
+header {
+    font-family: 'Roboto Mono', monospace;
 }
 
-h2 {
-    font-size: 20px
+header h1 {
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+header h2 {
+    font-size: 20px;
+    font-weight: normal;
 }
 
 .preview div{
