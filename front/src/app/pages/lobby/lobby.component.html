@@ -3,3 +3,37 @@
   <input fxFlex="90" type="text" readonly #copypasta [value]="link" />
   <button mat-raised-button [class.btn-success]="hasbeencopied" type="button" [ngxClipboard]="copypasta" (cbOnSuccess)="hasbeencopied = true">Copy</button>
 </div>
+
+<div fxLayout="row">
+  <div class="team" fxFlex="20">
+    <span>
+      <label>{{ api.current_lobby.nameTeamA }}</label>
+      <ng-container [ngSwitch]="canJoinAsCaptain('A')">
+        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain('A')">Join as captain</button>
+        <button *ngSwitchCase="'yourthecaptain'" color="accent" mat-raised-button>You're the captain of the team</button>
+        <button *ngSwitchCase="'slottaken'" disabled mat-raised-button>Captain slot already taken</button>
+      </ng-container>
+    </span>
+  </div>
+  <div class="preview" fxFlex="60">
+    <div *ngFor="let action of api.current_lobby.actions; let i = index;" [ngClass]="{ 'picked': action.action === 'PICK', 'banned': action.action === 'BAN', 'random': action.action === 'RANDOM'}">
+      <label *ngIf="action.action === 'RANDOM'; else teamchoose">{{ action.action }}</label>
+      <ng-template #teamchoose>
+          <label *ngIf="i%2 === 0; else teamB">Team 1 {{ action.action }}</label>
+          <ng-template #teamB><label>Team 2 {{ action.action }}</label></ng-template>
+      </ng-template>
+      <button mat-raised-button (click)="chooseMap()" color="primary" *ngIf="myturn(action, i)">Choose Map</button>
+    </div>
+  </div>
+  <div class="team" fxFlex>
+    <span>
+      <label>{{ api.current_lobby.nameTeamB }}</label>
+      <ng-container [ngSwitch]="canJoinAsCaptain('B')">
+        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain('B')">Join as captain</button>
+        <button *ngSwitchCase="'yourthecaptain'" color="accent" mat-raised-button>You're the captain of the team</button>
+        <button *ngSwitchCase="'slottaken'" disabled mat-raised-button>Captain slot already taken</button>
+      </ng-container>
+    </span>
+  </div>
+</div>
+<pre>{{ api.current_lobby  | json }}</pre>

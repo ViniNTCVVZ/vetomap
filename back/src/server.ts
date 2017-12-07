@@ -4,6 +4,10 @@ import * as WebSocket from 'ws';
 import * as crypto from "crypto";
 import { Lobby, Client, Map, Message, Response, Action, TeamSide, MapAction, MapActionResult } from './types';
 
+// mutex library
+var mutexify = require('mutexify');
+var lock = mutexify();
+
 // global lobbies (no database). We have to be careful about memory grow / leak
 let lobbies: Lobby[] = [];
 
@@ -49,14 +53,24 @@ wss.on('connection', (ws: WebSocket | any) => {
 
             // when joining a lobby
             case Action.Join: {
-                const joined_lobby: Lobby | any = lobbies.find((x: Lobby) => x.token == obj.data);
+                const joined_lobby: Lobby | any = lobbies.find((x: Lobby) => x.token === obj.data.token);
                 if (joined_lobby) {
+                    // client token in localstorage
+                    if (obj.data.client_token !== '') {
+                        const existing_item_index = joined_lobby.clients.findIndex((x: Client) => x.id === obj.data.client_token);
+                        // remove previous websocket and set new client_token (if needed)
+                        if ( existing_item_index != -1) {
+                            joined_lobby.clients.splice(existing_item_index, 1);
+                            ws.id = obj.data.client_token;
+                        }
+                    }
+                    
                     // link lobby to client (if needed)
                     if (joined_lobby.clients.findIndex((x: Client) => x.id === ws.id) < 0) {
                         joined_lobby.clients.push(new Client(ws.id));
                     }
                 }
-                ws.send(JSON.stringify(new Response(joined_lobby, joined_lobby ? '' : 'No lobby found for this token')));
+                ws.send(JSON.stringify(new Response({ lobby: joined_lobby, client_id: ws.id}, joined_lobby ? '' : 'No lobby found for this token')));
                 break;
             }
 
@@ -69,8 +83,7 @@ wss.on('connection', (ws: WebSocket | any) => {
                     // add lobby
                     lobbies.push(new_lobby);
                     // send lobby
-                    console.log(new_lobby);
-                    ws.send(JSON.stringify(new Response(new_lobby)));
+                    ws.send(JSON.stringify(new Response({ lobby: new_lobby, client_id: ws.id})));
                 } else {
                     ws.send(JSON.stringify(new Response(null, 'Bad lobby structure received')));
                 }
@@ -80,19 +93,33 @@ wss.on('connection', (ws: WebSocket | any) => {
             // when someone is joining a team as captain
             case Action.Captain: {
                 const teamside : TeamSide = <TeamSide>obj.data;
-                const lobby: Lobby | any = lobbies.find((x: Lobby) => x.clients.findIndex((c: Client) => c.id == ws.id) > -1);
+                const lobby: Lobby | any = lobbies.find((x: Lobby) => x.clients.findIndex((c: Client) => c.id === ws.id) > -1);
                 if (lobby && lobby.token) {
-                    let client = lobby.clients.findIndex((x: Client) => x.id === ws.id && x.captain === TeamSide.None);
-                    // if the client is in the lobby and there is no captain on this side, ok, you can become a captain
-                    if (client && !lobby.clients.findIndex((x: Client) => x.captain === teamside)) {
-                        (<Client>lobby.clients.find((x: Client) => x.id === ws.id)).captain = teamside;
-                        // send updated lobby for all clients
-                        wss.clients.forEach( (client: WebSocket) => {
-                            client.send(JSON.stringify(new Response(lobby)));
-                        })
-                    } else {
-                        ws.send(JSON.stringify(new Response(null, "You can not become captain on this team, the slot is already taken")));
-                    }
+                    // protected the code to avoid collision
+                    lock( (release: any) => {
+                        let client = lobby.clients.find((x: Client) => x.id === ws.id);
+                        // client not found :/
+                        if (!client) {
+                            ws.send(JSON.stringify(new Response(null, "It seems you're not connected to any room :/")));
+                        } else if (lobby.captainA === client.id || lobby.captainB === client.id) {
+                            // already captain !
+                            ws.send(JSON.stringify(new Response(null, "You are already the captain of the other team !")));
+                        } else if ((teamside === TeamSide.A && lobby.captainA === '') || (teamside === TeamSide.B && lobby.captainB === '')) {
+                            // if there is no captain on this side, then you can become the captain
+                            if (teamside === TeamSide.A) {
+                                lobby.captainA = client.id;
+                            } else {
+                                lobby.captainB = client.id;
+                            }
+                            // send updated lobby for all clients
+                            wss.clients.forEach( (client: WebSocket | any) => {
+                                client.send(JSON.stringify(new Response({ lobby: lobby, client_id: client.id })));
+                            })
+                        } else {
+                            ws.send(JSON.stringify(new Response(null, "You can not become captain on this team, the slot is already taken")));
+                        }
+                        release();
+                    });
                 } else {
                     ws.send(JSON.stringify(new Response(null, "You are not in a lobby right now, you can't become a captain")));
                 }
@@ -102,7 +129,7 @@ wss.on('connection', (ws: WebSocket | any) => {
             // when a captain is voting a map
             case Action.Vote: {
                 const map : Map = <Map>obj.data;
-                const lobby_index: number = lobbies.findIndex((x: Lobby) => x.clients.findIndex((c: Client) => c.id == ws.id) > -1);
+                const lobby_index: number = lobbies.findIndex((x: Lobby) => x.clients.findIndex((c: Client) => c.id === ws.id) > -1);
                 if (lobby_index > -1) {
                     let lobby = lobbies[lobby_index];
                     // is there any action available
@@ -125,8 +152,8 @@ wss.on('connection', (ws: WebSocket | any) => {
                             }
                             
                             // send updated lobby for all clients
-                            wss.clients.forEach( (client: WebSocket) => {
-                                client.send(JSON.stringify(new Response(lobby)));
+                            wss.clients.forEach( (client: WebSocket | any) => {
+                                client.send(JSON.stringify(new Response({ lobby: lobby, client_id: client.id })));
                             })
 
                             // removing lobby if no more action needed
@@ -143,9 +170,6 @@ wss.on('connection', (ws: WebSocket | any) => {
                 break;
             }
         }
-        
-        //log the lobbies
-        console.log(lobbies);
     });
 });
 
@@ -156,7 +180,6 @@ server.listen(process.env.PORT || 8999, () => {
 
 // check if clients are still alive
 setInterval(() => {
-    console.log('interval');
 
     // remove dead lobbies (to avoid memory grow / leak)
     lobbies.forEach( (lobby: Lobby, index_lobby: number) => {
@@ -177,6 +200,5 @@ setInterval(() => {
             lobbies.splice(index_lobby, 1);
         }
     });
-    console.log(wss.clients);
-    console.log(lobbies);
+    console.log('number of lobbies : ' + lobbies.length);
 }, 10000);

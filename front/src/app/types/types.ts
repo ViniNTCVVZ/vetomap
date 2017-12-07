@@ -1,9 +1,9 @@
 export enum Action {
-    Join,
-    Create,
-    Captain,
-    Vote,
-    None
+    Join = "JOIN",
+    Create = "CREATE",
+    Captain = "CAPTAIN",
+    Vote = "VOTE",
+    None = "NONE"
 }
 
 export enum MapAction {
@@ -14,9 +14,15 @@ export enum MapAction {
 }
 
 export enum TeamSide {
-    None,
-    A,
-    B
+    None = "NONE",
+    A = "A",
+    B = "B"
+}
+
+export enum TeamState {
+    NoCaptain = "nocaptain",
+    YourTheCaptain = "yourthecaptain",
+    SlotTaken = "slottaken"
 }
 
 export class Format {
@@ -50,9 +56,9 @@ export class Map {
 
 export class MapActionResult {
     constructor(
-        public map: Map = new Map(),
         public action: MapAction = MapAction.None,
-        public side: TeamSide = TeamSide.None
+        public side: TeamSide = TeamSide.None,
+        public map: Map = new Map()
     ){}
 }
 
@@ -60,7 +66,11 @@ export class Lobby {
     constructor(
         public token: string = '',
         public remaining_maps: Map[] = [],
-        public actions: MapActionResult[] = []
+        public actions: MapActionResult[] = [],
+        public nameTeamA: string = 'Team 1',
+        public nameTeamB: string = 'Team 2',
+        public captainA: string = '',
+        public captainB: string = ''
     ){}
 }
 
@@ -73,5 +83,5 @@ export class Message {
 
 export interface Response {
     error: string;
-    data: Lobby;
+    data: any;
 }

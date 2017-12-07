@@ -1,11 +1,11 @@
 import * as WebSocket from 'ws';
 
 export enum Action {
-    Join,
-    Create,
-    Captain,
-    Vote,
-    None
+    Join = "JOIN",
+    Create = "CREATE",
+    Captain = "CAPTAIN",
+    Vote = "VOTE",
+    None = "NONE"
 }
 
 export enum MapAction {
@@ -16,9 +16,9 @@ export enum MapAction {
 }
 
 export enum TeamSide {
-    None,
-    A,
-    B
+    None = "NONE",
+    A = "A",
+    B = "B"
 }
 
 export class Team {
@@ -37,9 +37,9 @@ export class Map {
 
 export class MapActionResult {
     constructor(
-        public map: Map = new Map(),
         public action: MapAction = MapAction.None,
-        public side: TeamSide = TeamSide.None
+        public side: TeamSide = TeamSide.None,
+        public map: Map = new Map()
     ){}
 }
 
@@ -48,11 +48,15 @@ export class Lobby {
         public token: string = '',
         public remaining_maps: Map[] = [],
         public actions: MapActionResult[] = [],
-        public clients: Client[] = []
+        public nameTeamA: string = 'Team 1',
+        public nameTeamB: string = 'Team 2',
+        public clients: Client[] = [],
+        public captainA: string = '',
+        public captainB: string = ''
     ){}
 
     isValid(): boolean {
-        return this.remaining_maps.length > 0 && this.remaining_maps.length == this.actions.length;
+        return this.nameTeamA !== '' && this.nameTeamB !== '' && this.remaining_maps.length > 0 && this.remaining_maps.length === this.actions.length;
     }
 }
 
@@ -64,12 +68,13 @@ export class Message {
 }
 
 export class Response {
-    public data: Lobby;
+    public data: any;
     public error: string = '';
 
-    constructor(data: Lobby | any, error: string = ''){
-        if (data) {
-            this.data = new Lobby(data.token, data.remaining_maps, data.actions);
+    constructor(data: any, error: string = ''){
+        this.data = data;
+        if (this.data && this.data.lobby && this.data.lobby instanceof Lobby) {
+            this.data.lobby = {...this.data.lobby, clients: []};
         }
         this.error = error;
     }
@@ -78,7 +83,6 @@ export class Response {
 export class Client {
     constructor(
         public id: string = '',
-        public isAlive: boolean = true,
-        public captain: TeamSide = TeamSide.None
+        public isAlive: boolean = true
     ){}
 }

@@ -51,3 +51,24 @@ h1 {
 h2 {
     font-size: 20px
 }
+
+.preview div{
+    margin: 10px;
+    display: block;
+    line-height: 50px;
+    padding: 0 15px;
+    border-radius: 3px;
+}
+
+.preview div.picked {
+    background: rgb(16, 65, 99);
+    color: #FFF;
+}
+.preview div.banned {
+    background: rgb(187, 0, 26);
+    color: #FFF;
+}
+.preview div.random {
+    background: rgb(119, 37, 101);
+    color: #FFF;
+}

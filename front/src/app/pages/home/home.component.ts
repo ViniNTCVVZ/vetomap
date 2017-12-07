@@ -55,10 +55,11 @@ export class HomeComponent implements OnInit {
     if (this.valid()) {
       let new_lobby = new Lobby();
       new_lobby.remaining_maps = this.api.mapList.filter(x => x.picked);
-      new_lobby.actions = this.currentMode.actions.map((x, indice) => new MapActionResult(null, x, (indice%2 === 0 ? TeamSide.A : TeamSide.B)));
+      new_lobby.actions = this.currentMode.actions.map((x, indice) => new MapActionResult(x, (indice%2 === 0 ? TeamSide.A : TeamSide.B)));
+      new_lobby.nameTeamA = this.lobbyForm.get('team1').value;
+      new_lobby.nameTeamB = this.lobbyForm.get('team2').value;
       this.api.createLobby(new_lobby)
         .then( (lobby: Lobby) => {
-          console.log(lobby);
           this.router.navigate(['/lobby/' + lobby.token]);
         })
         .catch( err => {

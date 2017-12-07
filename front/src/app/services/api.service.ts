@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Lobby, Map, Format, Mode, MapAction, Message, Action, Response } from '../types/types';
+import { Lobby, Map, Format, Mode, MapAction, Message, Action, Response, TeamSide } from '../types/types';
 
 @Injectable()
 export class ApiService {
@@ -95,6 +95,7 @@ export class ApiService {
 
   api_url: string = 'ws://localhost:8999';
   current_lobby: Lobby = null;
+  client_token: string = '';
   ws: WebSocket;
 
   constructor() { }
@@ -112,15 +113,15 @@ export class ApiService {
       }
       this.ws.onmessage = (message: MessageEvent) => {
         const res: Response = JSON.parse(message.data);
-        resolve(res.data);
+        resolve(res.data.lobby);
         this.ws.onmessage = this.onMessage;
       };
     });
   }
 
-  joinLobby(token: string): Promise<boolean> {
+  joinLobby(tokens: any): Promise<boolean> {
     return new Promise( (resolve, reject) => {
-      const message = new Message(Action.Join, token);
+      const message = new Message(Action.Join, tokens);
       if (!this.ws) {
         this.ws = new WebSocket(this.api_url);
         this.ws.onopen = () => {
@@ -139,10 +140,38 @@ export class ApiService {
         if (res.error) {
           reject(res.error);
         } else {
-          this.current_lobby = res.data;
-          this.ws.onmessage = this.onMessage;
+          this.current_lobby = res.data.lobby;
+          this.client_token = res.data.client_id;
+          localStorage.setItem(this.current_lobby.token, this.client_token);
           resolve(true);
         }
+        this.ws.onmessage = this.onMessage;
+      };
+    });
+  }
+
+  joinAsCaptain(side: TeamSide): Promise<boolean> {
+    return new Promise( (resolve, reject) => {
+      const message = new Message(Action.Captain, side);
+      if (!this.ws) {
+        reject('You are not connected to a lobby.')
+      } else {
+        this.ws.send(JSON.stringify(message));
+      }
+
+      this.ws.onerror = (error) => {
+        reject(error);
+        this.ws.onerror = this.onError;
+      };
+      this.ws.onmessage = (message: MessageEvent) => {
+        const res: Response = JSON.parse(message.data);
+        if (res.error) {
+          reject(res.error);
+        } else {
+          this.current_lobby = res.data.lobby;
+          resolve(true);
+        }
+        this.ws.onmessage = this.onMessage;
       };
     });
   }
