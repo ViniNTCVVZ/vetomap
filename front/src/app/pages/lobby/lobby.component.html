@@ -22,7 +22,7 @@
           <label *ngIf="i%2 === 0; else teamB">Team 1 {{ action.action }}</label>
           <ng-template #teamB><label>Team 2 {{ action.action }}</label></ng-template>
       </ng-template>
-      <button mat-raised-button (click)="chooseMap()" color="primary" *ngIf="myturn(action, i)">Choose Map</button>
+      <button mat-raised-button (click)="chooseMap(action)" color="primary" *ngIf="myturn(action, i)">Choose Map</button>
     </div>
   </div>
   <div class="team" fxFlex>

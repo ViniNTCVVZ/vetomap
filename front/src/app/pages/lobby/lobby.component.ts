@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
 
-import { Lobby, MapActionResult, TeamSide, TeamState } from '../../types/types';
+import { ChooseMapComponent } from '../../modals/choose-map/choose-map.component';
+import { Lobby, MapActionResult, TeamSide, TeamState, Map } from '../../types/types';
 import { ApiService } from '../../services/api.service';
 import { AppService } from '../../services/app.service';
 
@@ -13,8 +15,9 @@ import { AppService } from '../../services/app.service';
 export class LobbyComponent implements OnInit {
   hasbeencopied: boolean = false;
   link: string = '';
+  dialogRef: any;
 
-  constructor(public api: ApiService, private app: AppService, private router: Router) { 
+  constructor(public api: ApiService, private dialog: MatDialog, private app: AppService, private router: Router) { 
     this.link = window.location.href;
   }
 
@@ -43,5 +46,16 @@ export class LobbyComponent implements OnInit {
       if (this.api.current_lobby.captainB === this.api.client_token) return TeamState.YourTheCaptain;
       else return this.api.current_lobby.captainB === '' ? TeamState.NoCaptain : TeamState.SlotTaken;
     }
+  }
+
+  chooseMap(action: MapActionResult) {
+    this.dialogRef = this.dialog.open(ChooseMapComponent, {
+      width: '800px',
+      data: { action: action.action, maps: this.api.current_lobby.remaining_maps }
+    });
+
+    this.dialogRef.afterClosed().subscribe((result: Map) => {
+      console.log(result);
+    });
   }
 }

@@ -14,6 +14,7 @@ import { LobbyComponent } from './pages/lobby/lobby.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { Nl2BrPipe } from './pipes/nl2br.pipe';
+import { ChooseMapComponent } from './modals/choose-map/choose-map.component';
 
 @NgModule({
   imports: [
@@ -29,11 +30,12 @@ import { Nl2BrPipe } from './pipes/nl2br.pipe';
     HomeComponent,
     LobbyComponent,
     DialogComponent,
+    ChooseMapComponent,
     NotFoundComponent,
     Nl2BrPipe
   ],
   bootstrap: [AppComponent],
   providers: [ApiService, AppService],
-  entryComponents: [DialogComponent]
+  entryComponents: [DialogComponent, ChooseMapComponent]
 })
 export class AppModule { }

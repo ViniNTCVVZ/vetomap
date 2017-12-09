@@ -1,0 +1,16 @@
+
+.mapList {
+    text-align: center;
+}
+
+.mapList button {
+    padding-top: 10px;
+}
+
+.mapList button img {
+    max-height: 100px;
+}
+
+.mapList button label {
+    display: block;
+}
