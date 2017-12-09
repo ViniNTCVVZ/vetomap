@@ -160,10 +160,6 @@ wss.on('connection', (ws: WebSocket | any) => {
                                     client.send(JSON.stringify(new Response({ lobby: lobby, client_id: client.id })));
                                 })
 
-                                // removing lobby if no more action needed
-                                if (!next_action) {
-                                    lobbies.splice(lobby_index, 1);
-                                }
                             } else {
                                 ws.send(JSON.stringify(new Response(null, "This map has already been voted")));
                             }
@@ -184,6 +180,10 @@ server.listen(process.env.PORT || 8999, () => {
     console.log(`Server started on port ${server.address().port} :)`);
 });
 
+function getMinutesSince1970(): number {
+    return Math.floor(new Date().getTime() / (1000 * 60));
+}
+
 // check if clients are still alive
 setInterval(() => {
 
@@ -202,8 +202,17 @@ setInterval(() => {
                 lobby.clients.splice(index_client, 1);
             }
         });
+
+        // when no more client in the lobby, wet let live the lobby 5 minutes more (if someone needs to recheck the map veto)
         if (lobby.clients.length === 0) {
-            lobbies.splice(index_lobby, 1);
+            if (lobby.last_check === 0) {
+                lobby.last_check = getMinutesSince1970();
+            }
+            else if (lobby.last_check + 5 < getMinutesSince1970()) {
+                lobbies.splice(index_lobby, 1);
+            }
+        } else {
+            lobby.last_check = 0;
         }
     });
     console.log('number of lobbies : ' + lobbies.length);

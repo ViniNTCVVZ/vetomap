@@ -52,7 +52,8 @@ export class Lobby {
         public nameTeamB: string = 'Team 2',
         public clients: Client[] = [],
         public captainA: string = '',
-        public captainB: string = ''
+        public captainB: string = '',
+        public last_check: number = 0
     ){}
 
     isValid(): boolean {
