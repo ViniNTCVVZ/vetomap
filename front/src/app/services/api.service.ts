@@ -94,7 +94,7 @@ export class ApiService {
     ])
   ];
 
-  api_url: string = 'ws://localhost:8999';
+  api_url: string = 'ws://vetomap.com:8999';
   current_lobby: Lobby = null;
   client_token: string = '';
   ws: WebSocket;
