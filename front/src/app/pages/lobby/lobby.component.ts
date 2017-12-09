@@ -55,7 +55,10 @@ export class LobbyComponent implements OnInit {
     });
 
     this.dialogRef.afterClosed().subscribe((result: Map) => {
-      console.log(result);
+      this.api.voteForMap(result)
+      .catch(err => {
+        this.app.onError.next(err);
+      });
     });
   }
 }

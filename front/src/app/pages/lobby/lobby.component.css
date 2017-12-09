@@ -29,3 +29,25 @@ h3 label {
     display: block;
     margin-top: 6px;
 }
+
+.past {
+    opacity: 0.5;
+}
+
+.title span {
+    float: right;
+    display: block;
+    max-height: 50px;
+}
+
+.title span label {
+    display: block;
+    padding-right: 10px;
+    float: left;
+}
+
+.title span img {
+    max-height: 40px;
+    display: inline-block;
+    padding-top: 5px;
+}

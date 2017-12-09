@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Lobby, Map, Format, Mode, MapAction, Message, Action, Response, TeamSide } from '../types/types';
+import { AppService } from './app.service';
 
 @Injectable()
 export class ApiService {
@@ -98,7 +99,7 @@ export class ApiService {
   client_token: string = '';
   ws: WebSocket;
 
-  constructor() { }
+  constructor(private app: AppService) { }
 
   createLobby(lobby: Lobby): Promise<Lobby> {
     return new Promise( (resolve, reject) => {
@@ -177,12 +178,41 @@ export class ApiService {
     });
   }
 
-  onError(error) {
-    // console.log(error);
+  voteForMap(map: Map): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const message = new Message(Action.Vote, map);
+      if (!this.ws) {
+        reject('You are not connected to a lobby.')
+      } else {
+        this.ws.send(JSON.stringify(message));
+      }
+
+      this.ws.onerror = (error) => {
+        reject(error);
+        this.ws.onerror = this.onError;
+      };
+      this.ws.onmessage = (message: MessageEvent) => {
+        const res: Response = JSON.parse(message.data);
+        if (res.error) {
+          reject(res.error);
+        } else {
+          this.current_lobby = res.data.lobby;
+          resolve(true);
+        }
+        this.ws.onmessage = this.onMessage;
+      };
+    });
   }
 
-  onMessage(message) {
-    // console.log(message);
+  onError = (error: any): void => {
+    this.app.onError.next(error);
+  }
+
+  onMessage = (message: MessageEvent): void => {
+    const res: any = JSON.parse(message.data);
+    if (res.data && res.data.lobby) {
+      this.current_lobby = res.data.lobby;
+    }
   }
 
 }

@@ -128,45 +128,51 @@ wss.on('connection', (ws: WebSocket | any) => {
 
             // when a captain is voting a map
             case Action.Vote: {
-                const map : Map = <Map>obj.data;
-                const lobby_index: number = lobbies.findIndex((x: Lobby) => x.clients.findIndex((c: Client) => c.id === ws.id) > -1);
-                if (lobby_index > -1) {
-                    let lobby = lobbies[lobby_index];
-                    // is there any action available
-                    let action_index = lobby.actions.findIndex((x: MapActionResult) => x.map.name === '');
-                    if (action_index < 0) {
-                        ws.send(JSON.stringify(new Response(null, "This map has already been voted")));
-                    } else {
-                        let action = lobby.actions[action_index];
-                        let picked_map = lobby.remaining_maps.find((x: Map) => x.name === map.name);
-                        if (picked_map) {
-                            action.map = picked_map;
-                            lobby.remaining_maps.splice(lobby.remaining_maps.findIndex((x: Map) => x.name === map.name), 1);
-
-                            // picking random map if next_action is random
-                            let next_action = lobby.actions.find((x: MapActionResult) => x.map.name === '');
-                            while(next_action && next_action.action === MapAction.Random) {
-                                const random_map = lobby.remaining_maps[Math.floor(Math.random()*lobby.remaining_maps.length)];
-                                next_action.map = random_map;
-                                next_action = lobby.actions.find((x: MapActionResult) => x.map.name === '');
-                            }
-                            
-                            // send updated lobby for all clients
-                            wss.clients.forEach( (client: WebSocket | any) => {
-                                client.send(JSON.stringify(new Response({ lobby: lobby, client_id: client.id })));
-                            })
-
-                            // removing lobby if no more action needed
-                            if (!next_action) {
-                                lobbies.splice(lobby_index, 1);
-                            }
-                        } else {
+                // protected the code to avoid collision
+                lock((release: any) => {
+                    const map: Map = <Map>obj.data;
+                    const lobby_index: number = lobbies.findIndex((x: Lobby) => x.clients.findIndex((c: Client) => c.id === ws.id) > -1);
+                    if (lobby_index > -1) {
+                        let lobby = lobbies[lobby_index];
+                        // is there any action available
+                        let action_index = lobby.actions.findIndex((x: MapActionResult) => x.map.name === '');
+                        if (action_index < 0) {
                             ws.send(JSON.stringify(new Response(null, "This map has already been voted")));
+                        } else {
+                            let action = lobby.actions[action_index];
+                            let chosen_map_index = lobby.remaining_maps.findIndex((x: Map) => x.name === map.name);
+                            if (chosen_map_index != -1) {
+                                action.map = new Map(lobby.remaining_maps[chosen_map_index].name);
+                                lobby.remaining_maps.splice(chosen_map_index, 1);
+
+                                // picking random map if next_action is random
+                                let next_action = lobby.actions.find((x: MapActionResult) => x.map.name === '');
+                                while (next_action && next_action.action === MapAction.Random) {
+                                    const random_map_index = Math.floor(Math.random() * lobby.remaining_maps.length);
+                                    const random_map = lobby.remaining_maps[random_map_index];
+                                    next_action.map = new Map(random_map.name);
+                                    lobby.remaining_maps.splice(random_map_index, 1);
+                                    next_action = lobby.actions.find((x: MapActionResult) => x.map.name === '');
+                                }
+
+                                // send updated lobby for all clients
+                                wss.clients.forEach((client: WebSocket | any) => {
+                                    client.send(JSON.stringify(new Response({ lobby: lobby, client_id: client.id })));
+                                })
+
+                                // removing lobby if no more action needed
+                                if (!next_action) {
+                                    lobbies.splice(lobby_index, 1);
+                                }
+                            } else {
+                                ws.send(JSON.stringify(new Response(null, "This map has already been voted")));
+                            }
                         }
+                    } else {
+                        ws.send(JSON.stringify(new Response(null, "You are not in a lobby right now, you can't vote for a map")));
                     }
-                } else {
-                    ws.send(JSON.stringify(new Response(null, "You are not in a lobby right now, you can't vote for a map")));
-                }
+                    release();
+                });
                 break;
             }
         }

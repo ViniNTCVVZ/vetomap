@@ -16,12 +16,14 @@
     </span>
   </div>
   <div class="preview" fxFlex="60">
-    <div *ngFor="let action of api.current_lobby.actions; let i = index;" [ngClass]="{ 'picked': action.action === 'PICK', 'banned': action.action === 'BAN', 'random': action.action === 'RANDOM'}">
-      <label *ngIf="action.action === 'RANDOM'; else teamchoose">{{ action.action }}</label>
-      <ng-template #teamchoose>
-          <label *ngIf="i%2 === 0; else teamB">Team 1 {{ action.action }}</label>
-          <ng-template #teamB><label>Team 2 {{ action.action }}</label></ng-template>
-      </ng-template>
+    <div *ngFor="let action of api.current_lobby.actions; let i = index;" [ngClass]="{ 'past': action.map.name !== '', 'picked': action.action === 'PICK', 'banned': action.action === 'BAN', 'random': action.action === 'RANDOM'}">
+      <label class="title">
+        <span *ngIf="action.map.name !== ''">
+          <label>{{ action.map.name }}</label>
+          <img [src]="'/assets/' + action.map.name + '.png'" />
+        </span>
+        {{ action.action === 'RANDOM' ? 'Server PICK' : i%2 === 0 ? 'Team 1 ' + action.action : 'Team 2 ' + action.action }}
+      </label>
       <button mat-raised-button (click)="chooseMap(action)" color="primary" *ngIf="myturn(action, i)">Choose Map</button>
     </div>
   </div>
