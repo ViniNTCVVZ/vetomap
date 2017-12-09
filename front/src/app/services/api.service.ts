@@ -104,15 +104,15 @@ export class ApiService {
   createLobby(lobby: Lobby): Promise<Lobby> {
     return new Promise( (resolve, reject) => {
       this.ws = new WebSocket(this.api_url);
+      this.ws.onopen = () => {
+        let message = new Message(Action.Create, lobby);
+        this.ws.send(JSON.stringify(message));
+      }
       this.ws.onerror = (error) => {
         reject(`Unable to reach the server. Service unavailable. 
         You can't create new lobby for map veto right now. I'm sorry :'(`);
         this.ws.onerror = this.onError;
       };
-      this.ws.onopen = () => {
-        let message = new Message(Action.Create, lobby);
-        this.ws.send(JSON.stringify(message));
-      }
       this.ws.onmessage = (message: MessageEvent) => {
         const res: Response = JSON.parse(message.data);
         resolve(res.data.lobby);
