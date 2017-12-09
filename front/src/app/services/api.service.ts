@@ -115,7 +115,11 @@ export class ApiService {
       };
       this.ws.onmessage = (message: MessageEvent) => {
         const res: Response = JSON.parse(message.data);
-        resolve(res.data.lobby);
+        if (res.error) {
+          reject(res.error);
+        } else {
+          resolve(res.data.lobby);
+        }
         this.ws.onmessage = this.onMessage;
       };
     });
