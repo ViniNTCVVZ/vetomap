@@ -38,7 +38,7 @@
     </span>
   </div>
 </div>
-<div *ngIf="api.current_lobby.remaining_maps.length === 0">
+<div *ngIf="finished()">
   <h4>The chosen maps are</h4>
   <div class="mapList">
     <div *ngFor="let map of chosenMaps()">

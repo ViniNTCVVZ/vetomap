@@ -62,6 +62,10 @@ export class LobbyComponent implements OnInit {
     });
   }
 
+  finished(): boolean {
+    return this.api.current_lobby.actions.findIndex(x => x.map.name === '') === -1;
+  }
+
   chosenMaps(): Map[] {
     return this.api.current_lobby.actions.filter(x => x.action !== MapAction.Ban).map(x => x.map);
   }

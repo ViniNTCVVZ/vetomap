@@ -57,7 +57,7 @@ export class Lobby {
     ){}
 
     isValid(): boolean {
-        return this.nameTeamA !== '' && this.nameTeamB !== '' && this.remaining_maps.length > 0 && this.remaining_maps.length === this.actions.length;
+        return this.nameTeamA !== '' && this.nameTeamB !== '' && this.remaining_maps.length > 0 && this.remaining_maps.length >= this.actions.length;
     }
 }
 
