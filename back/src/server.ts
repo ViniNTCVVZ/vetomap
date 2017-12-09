@@ -76,7 +76,7 @@ wss.on('connection', (ws: WebSocket | any) => {
 
             // when sending form to create a new lobby
             case Action.Create: {
-                const new_lobby : Lobby = new Lobby(token(), obj.data.remaining_maps, obj.data.actions);
+                const new_lobby: Lobby = new Lobby(token(), obj.data.remaining_maps, obj.data.actions, obj.data.nameTeamA, obj.data.nameTeamB);
                 if (new_lobby.isValid()) {
                     // link lobby to client
                     new_lobby.clients.push(new Client(ws.id));
