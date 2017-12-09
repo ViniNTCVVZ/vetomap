@@ -18,6 +18,9 @@ export class LobbyComponent implements OnInit {
   link: string = '';
   dialogRef: any;
 
+  teamA: TeamSide = TeamSide.A;
+  teamB: TeamSide = TeamSide.B;
+
   constructor(public api: ApiService, private dialog: MatDialog, private app: AppService, private router: Router) { 
     this.link = window.location.href;
   }

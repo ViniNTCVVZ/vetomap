@@ -12,8 +12,8 @@
   <div class="team" fxFlex="20">
     <span>
       <label>{{ api.current_lobby.nameTeamA }}</label>
-      <ng-container [ngSwitch]="canJoinAsCaptain('A')">
-        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain('A')">Join as captain</button>
+      <ng-container [ngSwitch]="canJoinAsCaptain(teamA)">
+        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain(teamA)">Join as captain</button>
         <button *ngSwitchCase="'yourthecaptain'" color="accent" mat-raised-button>You're the captain of the team</button>
         <button *ngSwitchCase="'slottaken'" disabled mat-raised-button>Captain slot already taken</button>
       </ng-container>
@@ -34,8 +34,8 @@
   <div class="team" fxFlex>
     <span>
       <label>{{ api.current_lobby.nameTeamB }}</label>
-      <ng-container [ngSwitch]="canJoinAsCaptain('B')">
-        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain('B')">Join as captain</button>
+      <ng-container [ngSwitch]="canJoinAsCaptain(teamB)">
+        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain(teamB)">Join as captain</button>
         <button *ngSwitchCase="'yourthecaptain'" color="accent" mat-raised-button>You're the captain of the team</button>
         <button *ngSwitchCase="'slottaken'" disabled mat-raised-button>Captain slot already taken</button>
       </ng-container>
