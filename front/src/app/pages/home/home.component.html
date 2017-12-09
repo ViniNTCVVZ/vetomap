@@ -65,7 +65,7 @@
     <label>Map list</label>
     <div class="mapList">
       <button type="button" (click)="switchMap(map)" *ngFor="let map of api.mapList" [ngClass]="{ 'picked': map.picked }" mat-button>
-        <img [src]="'/assets/' + map.name + '.png'" />
+        <img [src]="'/assets/' + map.name + '.jpg'" />
         <label>{{ map.name }}</label>
       </button>
     </div>

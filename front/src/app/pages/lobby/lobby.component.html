@@ -24,7 +24,7 @@
       <label class="title">
         <span *ngIf="action.map.name !== ''">
           <label>{{ action.map.name }}</label>
-          <img [src]="'/assets/' + action.map.name + '.png'" />
+          <img [src]="'/assets/' + action.map.name + '.jpg'" />
         </span>
         {{ action.action === 'RANDOM' ? 'Server PICK' : i%2 === 0 ? 'Team 1 ' + action.action : 'Team 2 ' + action.action }}
       </label>
@@ -46,7 +46,7 @@
   <h4>The chosen maps are</h4>
   <div class="mapList">
     <div *ngFor="let map of chosenMaps()">
-      <img [src]="'/assets/' + map.name + '.png'" />
+      <img [src]="'/assets/' + map.name + '.jpg'" />
       <label>{{ map.name }}</label>
     </div>
   </div>

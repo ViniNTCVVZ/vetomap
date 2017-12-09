@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <div class="mapList">
     <button type="button" (click)="chooseMap(map)" *ngFor="let map of maps" mat-button>
-      <img [src]="'/assets/' + map.name + '.png'" />
+      <img [src]="'/assets/' + map.name + '.jpg'" />
       <label>{{ map.name }}</label>
     </button>
   </div>
