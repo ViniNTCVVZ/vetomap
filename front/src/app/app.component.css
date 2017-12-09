@@ -28,3 +28,7 @@ header img {
 footer{
     margin-top: 10px;
 }
+
+footer span {
+    float: right;
+}
