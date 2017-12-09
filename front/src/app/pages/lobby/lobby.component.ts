@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { ChooseMapComponent } from '../../modals/choose-map/choose-map.component';
+import { ChooseMapComponent } from '../../dialog/choose-map/choose-map.component';
+import { ConfirmDialogComponent } from '../../dialog/confirm-dialog/confirm-dialog.component';
 import { Lobby, MapActionResult, TeamSide, TeamState, Map, MapAction } from '../../types/types';
 import { ApiService } from '../../services/api.service';
 import { AppService } from '../../services/app.service';
@@ -68,5 +69,18 @@ export class LobbyComponent implements OnInit {
 
   chosenMaps(): Map[] {
     return this.api.current_lobby.actions.filter(x => x.action !== MapAction.Ban).map(x => x.map);
+  }
+
+  confirmLeavingPage() {
+    this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '600px',
+      data: 'Do you really want to leave this page and lose your ongoing map veto ?'
+    });
+
+    this.dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.router.navigate(['']);
+      }
+    });
   }
 }

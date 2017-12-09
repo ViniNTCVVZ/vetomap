@@ -1,4 +1,8 @@
-<h3>You just need to copy the link below and share it to the captains of the teams. <label>Wait captains to join a team before sharing to other players</label></h3>
+<button mat-raised-button (click)="confirmLeavingPage()">Go back to the homepage</button>
+<h3>
+  You just need to copy the link below and share it to those who want to see the map veto in real time. 
+  <label>Share to captains first before sharing to other !</label>
+</h3>
 <div fxLayout="row">
   <input fxFlex="90" type="text" readonly #copypasta [value]="link" />
   <button mat-raised-button [class.btn-success]="hasbeencopied" type="button" [ngxClipboard]="copypasta" (cbOnSuccess)="hasbeencopied = true">Copy</button>

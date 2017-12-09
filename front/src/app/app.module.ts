@@ -11,10 +11,11 @@ import { MaterialModule } from './material.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LobbyComponent } from './pages/lobby/lobby.component';
-import { DialogComponent } from './dialog/dialog.component';
+import { InfoDialogComponent } from './dialog/info-dialog/info-dialog.component';
+import { ChooseMapComponent } from './dialog/choose-map/choose-map.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { Nl2BrPipe } from './pipes/nl2br.pipe';
-import { ChooseMapComponent } from './modals/choose-map/choose-map.component';
+import { ConfirmDialogComponent } from './dialog/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   imports: [
@@ -29,13 +30,14 @@ import { ChooseMapComponent } from './modals/choose-map/choose-map.component';
     AppComponent, 
     HomeComponent,
     LobbyComponent,
-    DialogComponent,
+    InfoDialogComponent,
+    ConfirmDialogComponent,
     ChooseMapComponent,
     NotFoundComponent,
     Nl2BrPipe
   ],
   bootstrap: [AppComponent],
   providers: [ApiService, AppService],
-  entryComponents: [DialogComponent, ChooseMapComponent]
+  entryComponents: [InfoDialogComponent, ConfirmDialogComponent, ChooseMapComponent]
 })
 export class AppModule { }
