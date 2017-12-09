@@ -51,3 +51,24 @@ h3 label {
     display: inline-block;
     padding-top: 5px;
 }
+
+h4{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.mapList div {
+    margin: 15px;
+    text-align: center;
+}
+
+.mapList div img {
+    display: block;
+    max-height: 150px;
+    margin: auto;
+}
+
+.mapList div label {
+    display: block
+}

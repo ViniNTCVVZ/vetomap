@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { ChooseMapComponent } from '../../modals/choose-map/choose-map.component';
-import { Lobby, MapActionResult, TeamSide, TeamState, Map } from '../../types/types';
+import { Lobby, MapActionResult, TeamSide, TeamState, Map, MapAction } from '../../types/types';
 import { ApiService } from '../../services/api.service';
 import { AppService } from '../../services/app.service';
 
@@ -60,5 +60,9 @@ export class LobbyComponent implements OnInit {
         this.app.onError.next(err);
       });
     });
+  }
+
+  chosenMaps(): Map[] {
+    return this.api.current_lobby.actions.filter(x => x.action !== MapAction.Ban).map(x => x.map);
   }
 }
