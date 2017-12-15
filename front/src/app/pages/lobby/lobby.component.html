@@ -1,18 +1,17 @@
-<button mat-raised-button (click)="confirmLeavingPage()">Go back to the homepage</button>
+<button class="backbutton" mat-raised-button (click)="confirmLeavingPage()">Go back to the homepage</button>
 
 <div class="share">
   <h3>
     You just need to copy the link below and share it to those who want to see the map veto. <br />
     <label>Share to captains first to let them take the captain's slot before sharing to others !</label>
   </h3>
-  <div class="link" fxLayout="row">
-    <input fxFlex="90" type="text" readonly #copypasta [value]="link" />
-    <button mat-raised-button [class.btn-success]="hasbeencopied" type="button" [ngxClipboard]="copypasta" (cbOnSuccess)="hasbeencopied = true">Copy</button>
+  <div class="link">
+    <input type="text" readonly #copypasta [value]="link" /><button mat-raised-button [class.btn-success]="hasbeencopied" type="button" [ngxClipboard]="copypasta" (cbOnSuccess)="hasbeencopied = true">Copy</button>
   </div>
 </div>
 
-<div fxLayout="row">
-  <div class="team" fxFlex="20">
+<div>
+  <div class="team teamA">
     <span>
       <label>{{ api.current_lobby.nameTeamA }}</label>
       <ng-container [ngSwitch]="canJoinAsCaptain(teamA)">
@@ -22,7 +21,17 @@
       </ng-container>
     </span>
   </div>
-  <div class="preview" fxFlex="60">
+  <div class="team teamB">
+    <span>
+      <label>{{ api.current_lobby.nameTeamB }}</label>
+      <ng-container [ngSwitch]="canJoinAsCaptain(teamB)">
+        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain(teamB)">Join as captain</button>
+        <button *ngSwitchCase="'yourthecaptain'" color="accent" mat-raised-button>You're the captain of the team</button>
+        <button *ngSwitchCase="'slottaken'" disabled mat-raised-button>Captain slot already taken</button>
+      </ng-container>
+    </span>
+  </div>
+  <div class="preview">
     <div *ngFor="let action of api.current_lobby.actions; let i = index;" [ngClass]="{ 'past': action.map.name !== '', 'picked': action.action === 'PICK', 'banned': action.action === 'BAN', 'random': action.action === 'RANDOM'}">
       <label class="title">
         <span *ngIf="action.map.name !== ''">
@@ -34,16 +43,7 @@
       <button mat-raised-button (click)="chooseMap(action)" color="primary" *ngIf="myturn(action, i)">Choose Map</button>
     </div>
   </div>
-  <div class="team" fxFlex>
-    <span>
-      <label>{{ api.current_lobby.nameTeamB }}</label>
-      <ng-container [ngSwitch]="canJoinAsCaptain(teamB)">
-        <button *ngSwitchCase="'nocaptain'" color="primary" mat-raised-button (click)="joinAsCaptain(teamB)">Join as captain</button>
-        <button *ngSwitchCase="'yourthecaptain'" color="accent" mat-raised-button>You're the captain of the team</button>
-        <button *ngSwitchCase="'slottaken'" disabled mat-raised-button>Captain slot already taken</button>
-      </ng-container>
-    </span>
-  </div>
+  <hr />
 </div>
 <div *ngIf="finished()">
   <h4>The chosen maps are</h4>

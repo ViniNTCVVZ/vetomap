@@ -6,8 +6,13 @@
 }
 
 .share .link {
-    width: 75%;
-    margin: auto;
+    text-align: center
+}
+
+.share .link input {
+    display: inline-block;
+    height: 30px;
+    width: 50%;
 }
 
 h3 {
@@ -23,6 +28,22 @@ h3 label {
 
 .team {
     text-align: center;
+    width: 20%;
+}
+
+.teamA {
+    float: left;
+}
+
+.teamB {
+    float: right;
+}
+
+hr {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    clear: both;
 }
 
 .team label {
@@ -36,7 +57,8 @@ h3 label {
 }
 
 .preview {
-    padding: 20px;
+    width: 59%;
+    margin: auto;
 }
 
 .preview button {
@@ -86,4 +108,18 @@ h4{
 
 .mapList div label {
     display: block
+}
+
+@media screen and (max-width: 850px) {
+    h3{
+        font-size: 0.90em;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .teamA, .teamB, .preview, .backbutton{
+        float: none;
+        display: block;
+        width: 100%;
+    }
 }
