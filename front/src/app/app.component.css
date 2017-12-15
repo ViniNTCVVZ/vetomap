@@ -32,3 +32,28 @@ footer{
 footer span {
     float: right;
 }
+
+@media screen and (max-width: 950px) {
+    header {
+        background: url(/assets/repeat.png) repeat;
+    }
+    header h1, header h2 {
+        font-size: 0.80em;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    header h1 {
+        font-size: 0.70em;
+    }
+    header h2 {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    footer span {
+        float: none;
+        display: block;
+    }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { Map, MapAction, Format, Mode, Lobby, MapActionResult, TeamSide } from '
 })
 export class HomeComponent implements OnInit {
 
+  flexvalue = 50;
   lobbyForm: FormGroup;
   currentFormat: Format;
   currentMode: Mode;
@@ -27,6 +28,14 @@ export class HomeComponent implements OnInit {
       mode: [this.currentMode, Validators.required]
     });
   }
+  
+  @HostListener('window:resize') onResize() {
+    this.updateFlexvalue();
+  }
+
+  updateFlexvalue() {
+    this.flexvalue = window.innerWidth > 600 ? 50 : 100;
+  }
 
   valid(): boolean {
     return this.lobbyForm.valid && this.validMapList();
@@ -40,6 +49,7 @@ export class HomeComponent implements OnInit {
     this.lobbyForm.get('mode').valueChanges.subscribe( (mode: Mode) => {
       this.currentMode = mode;
     });
+    this.updateFlexvalue();
   }
 
   validMapList(): boolean {

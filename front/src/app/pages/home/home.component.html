@@ -1,7 +1,7 @@
 <form [formGroup]="lobbyForm" (ngSubmit)="createLobby()">
 
-  <div fxLayout="row" layout-wrap>
-    <div fxFlex="50">
+  <div fxLayout="row" fxLayoutWrap>
+    <div [fxFlex]="flexvalue">
       <div class="form-control">
         <mat-form-field class="full">
           <input matInput placeholder="Name of team 1" formControlName="team1">
@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div fxFlex="50">
+    <div [fxFlex]="flexvalue">
       <div class="form-control">
         <mat-form-field class="full">
           <input matInput placeholder="Name of team 2" formControlName="team2">
@@ -23,8 +23,8 @@
     </div>
   </div>
 
-  <div fxLayout="row" layout-wrap>
-    <div fxFlex="50">
+  <div fxLayout="row" fxLayoutWrap>
+    <div [fxFlex]="flexvalue">
       <div class="form-control">
         <mat-form-field class="full">
           <mat-select placeholder="Format" formControlName="format">
@@ -35,7 +35,7 @@
         </mat-form-field>
       </div>
     </div>
-    <div fxFlex="50">
+    <div [fxFlex]="flexvalue">
       <div class="form-control">
         <mat-form-field class="full">
           <mat-select placeholder="Mode" formControlName="mode">

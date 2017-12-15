@@ -33,3 +33,10 @@
 .mapList button label {
     display: block;
 }
+
+@media screen and (max-width: 500px) {
+    .mapList button {
+        display: block;
+        margin: auto;
+    }
+}
