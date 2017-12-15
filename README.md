@@ -14,7 +14,9 @@ You will also need [TypeScript compiler](https://www.typescriptlang.org/#downloa
 
 ### Installing
 
-Serve Angular code (front) by executing this command into the *front* directory then you can access the application on http://localhost:4200
+First, you need run `npm install` on both directories *front* and *back* to install the node.js dependencies.
+
+Then, you can deploy Angular code (front) by executing this command into the *front* directory then you can access the application on http://localhost:4200
 
 ```
 ng serve
@@ -23,7 +25,7 @@ ng serve
 To deploy the backend, you need to compile the code with typescript compiler into the *back* directory by using `tsc` then run the node.js program with this command into the *back* directory
 
 ```
-node ./dist/server.js
+node ./dist/server/server.js
 ```
 
 ## Deployment
