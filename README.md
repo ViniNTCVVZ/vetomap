@@ -14,15 +14,15 @@ You will also need [TypeScript compiler](https://www.typescriptlang.org/#downloa
 
 ### Installing
 
-First, you need to run `npm install` on both directories *front* and *back* to install the node.js dependencies.
+First, you need to run `npm install` on both *front* and *back* folders to install the node.js dependencies.
 
-Then, you can deploy Angular front-end by executing the command below into the directory *front* and access to the application on http://localhost:4200
+Then, you can deploy Angular front-end by executing the command below into the *front* folder and access to the application on http://localhost:4200 : 
 
 ```
 ng serve
 ```
 
-To deploy the back-end, you need to compile the code with the typescript compiler into the directory *back* with the command `tsc` and run the node.js application
+To deploy the back-end, you need to compile the code with the typescript compiler into the *back* folder with the command `tsc` and run the node.js application : 
 
 ```
 node ./dist/server/server.js
@@ -30,7 +30,20 @@ node ./dist/server/server.js
 
 ## Deployment
 
-You should build the Angular front-end with **aot** and **prod** options like this `ng build --prod --aot`. Then deploy the content of the *dist* folder on a webserver.
+First, don't forget to change the websocket url in *front/src/app/services/api.service.ts* with your own domain name (same port).
+
+Then, you should build the Angular application with **aot** and **prod** options : `ng build --prod --aot`. Then deploy the content of the *front/dist* folder on the webserver.
+
+You also need to add some rewrite rules to ensure that all urls redirect to the *index.html* file. For example, on an Apache server, you need to add those rules in the virtual host configuration file : 
+
+```
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html[L]
+```
 
 To deploy the back-end, you just need to run the compiled node application on any server. You can use [PM2](http://pm2.keymetrics.io/) for example to better handle and monitor the application.
 
