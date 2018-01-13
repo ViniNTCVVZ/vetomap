@@ -32,13 +32,13 @@
     </span>
   </div>
   <div class="preview">
-    <div *ngFor="let action of api.current_lobby.actions; let i = index;" [ngClass]="{ 'past': action.map.name !== '', 'picked': action.action === 'PICK', 'banned': action.action === 'BAN', 'random': action.action === 'RANDOM'}">
+    <div *ngFor="let action of api.current_lobby.actions; let i = index;" [ngClass]="getActionClasses(action)">
       <label class="title">
         <span *ngIf="action.map.name !== ''">
           <label>{{ action.map.name }}</label>
           <img [src]="'/assets/' + action.map.name + '.jpg'" />
         </span>
-        {{ action.action === 'RANDOM' ? 'Server PICK' : i%2 === 0 ? 'Team 1 ' + action.action : 'Team 2 ' + action.action }}
+        {{ getActionLibelle(action, i) }}
       </label>
       <button mat-raised-button (click)="chooseMap(action)" color="primary" *ngIf="myturn(action, i)">Choose Map</button>
     </div>

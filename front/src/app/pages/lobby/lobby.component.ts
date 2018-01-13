@@ -14,14 +14,14 @@ import { AppService } from '../../services/app.service';
   styleUrls: ['./lobby.component.scss']
 })
 export class LobbyComponent implements OnInit {
-  hasbeencopied: boolean = false;
-  link: string = '';
+  hasbeencopied = false;
+  link = '';
   dialogRef: any;
 
   teamA: TeamSide = TeamSide.A;
   teamB: TeamSide = TeamSide.B;
 
-  constructor(public api: ApiService, private dialog: MatDialog, private app: AppService, private router: Router) { 
+  constructor(public api: ApiService, private dialog: MatDialog, private app: AppService, private router: Router) {
     this.link = window.location.href;
   }
 
@@ -44,11 +44,17 @@ export class LobbyComponent implements OnInit {
 
   canJoinAsCaptain(side: TeamSide): TeamState {
     if (side === TeamSide.A) {
-      if (this.api.current_lobby.captainA === this.api.client_token) return TeamState.YourTheCaptain;
-      else return this.api.current_lobby.captainA === '' ? TeamState.NoCaptain : TeamState.SlotTaken;
+      if (this.api.current_lobby.captainA === this.api.client_token) {
+        return TeamState.YourTheCaptain;
+      } else {
+        return this.api.current_lobby.captainA === '' ? TeamState.NoCaptain : TeamState.SlotTaken;
+      }
     } else {
-      if (this.api.current_lobby.captainB === this.api.client_token) return TeamState.YourTheCaptain;
-      else return this.api.current_lobby.captainB === '' ? TeamState.NoCaptain : TeamState.SlotTaken;
+      if (this.api.current_lobby.captainB === this.api.client_token) {
+        return TeamState.YourTheCaptain;
+      } else {
+        return this.api.current_lobby.captainB === '' ? TeamState.NoCaptain : TeamState.SlotTaken;
+      }
     }
   }
 
@@ -85,5 +91,26 @@ export class LobbyComponent implements OnInit {
         this.router.navigate(['']);
       }
     });
+  }
+
+  getActionClasses(action: MapActionResult): any {
+    return {
+      'past': action.map.name !== '',
+      'picked': action.action === 'PICK',
+      'banned': action.action === 'BAN',
+      'random': action.action === 'RANDOM'
+    };
+  }
+
+  getActionLibelle(action: MapActionResult, index: number): string {
+    if (action.action === 'RANDOM') {
+      return 'Server PICK';
+    } else {
+      if (index % 2 === 0) {
+        return `${this.api.current_lobby.nameTeamA} ${action.action}`;
+      } else {
+        return `${this.api.current_lobby.nameTeamB} ${action.action}`;
+      }
+    }
   }
 }
