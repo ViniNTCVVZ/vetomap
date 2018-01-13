@@ -5,7 +5,7 @@ import { Subject } from 'rxjs/Subject';
 export class AppService {
 
   onError = new Subject();
-  
+
   constructor() { }
 
 }

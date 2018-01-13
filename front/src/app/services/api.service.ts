@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 @Injectable()
 export class ApiService {
 
-  defaultFormat: number = 3;
+  defaultFormat = 3;
 
   mapList: Map[] = [
     new Map('cache', true),
@@ -94,9 +94,9 @@ export class ApiService {
     ])
   ];
 
-  api_url: string = 'ws://localhost:8999';
+  api_url = 'ws://localhost:8999';
   current_lobby: Lobby = null;
-  client_token: string = '';
+  client_token = '';
   ws: WebSocket;
 
   constructor(private app: AppService) { }
@@ -105,11 +105,11 @@ export class ApiService {
     return new Promise( (resolve, reject) => {
       this.ws = new WebSocket(this.api_url);
       this.ws.onopen = () => {
-        let message = new Message(Action.Create, lobby);
+        const message = new Message(Action.Create, lobby);
         this.ws.send(JSON.stringify(message));
-      }
+      };
       this.ws.onerror = (error) => {
-        reject(`Unable to reach the server. Service unavailable. 
+        reject(`Unable to reach the server. Service unavailable.
         You can't create new lobby for map veto right now. I'm sorry :'(`);
         this.ws.onerror = this.onError;
       };
@@ -132,17 +132,17 @@ export class ApiService {
         this.ws = new WebSocket(this.api_url);
         this.ws.onopen = () => {
           this.ws.send(JSON.stringify(message));
-        }
+        };
       } else {
         this.ws.send(JSON.stringify(message));
       }
-      
+
       this.ws.onerror = (error) => {
         reject(error);
         this.ws.onerror = this.onError;
       };
-      this.ws.onmessage = (message: MessageEvent) => {
-        const res: Response = JSON.parse(message.data);
+      this.ws.onmessage = (msg: MessageEvent) => {
+        const res: Response = JSON.parse(msg.data);
         if (res.error) {
           reject(res.error);
         } else {
@@ -160,7 +160,7 @@ export class ApiService {
     return new Promise( (resolve, reject) => {
       const message = new Message(Action.Captain, side);
       if (!this.ws) {
-        reject('You are not connected to a lobby.')
+        reject('You are not connected to a lobby.');
       } else {
         this.ws.send(JSON.stringify(message));
       }
@@ -169,8 +169,8 @@ export class ApiService {
         reject(error);
         this.ws.onerror = this.onError;
       };
-      this.ws.onmessage = (message: MessageEvent) => {
-        const res: Response = JSON.parse(message.data);
+      this.ws.onmessage = (msg: MessageEvent) => {
+        const res: Response = JSON.parse(msg.data);
         if (res.error) {
           reject(res.error);
         } else {
@@ -186,7 +186,7 @@ export class ApiService {
     return new Promise((resolve, reject) => {
       const message = new Message(Action.Vote, map);
       if (!this.ws) {
-        reject('You are not connected to a lobby.')
+        reject('You are not connected to a lobby.');
       } else {
         this.ws.send(JSON.stringify(message));
       }
@@ -195,8 +195,8 @@ export class ApiService {
         reject(error);
         this.ws.onerror = this.onError;
       };
-      this.ws.onmessage = (message: MessageEvent) => {
-        const res: Response = JSON.parse(message.data);
+      this.ws.onmessage = (msg: MessageEvent) => {
+        const res: Response = JSON.parse(msg.data);
         if (res.error) {
           reject(res.error);
         } else {

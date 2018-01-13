@@ -5,7 +5,7 @@ import { MapAction, Map } from '../../types/types';
 @Component({
   selector: 'app-choose-map',
   templateUrl: './choose-map.component.html',
-  styleUrls: ['./choose-map.component.css']
+  styleUrls: ['./choose-map.component.scss']
 })
 export class ChooseMapComponent implements OnInit {
 

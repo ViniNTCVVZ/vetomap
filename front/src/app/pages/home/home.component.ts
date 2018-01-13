@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   currentFormat: Format;
   currentMode: Mode;
 
-  constructor(public api: ApiService, private fb: FormBuilder, private app: AppService, private router: Router) { 
+  constructor(public api: ApiService, private fb: FormBuilder, private app: AppService, private router: Router) {
     this.currentFormat = this.api.formats.find(x => x.value === this.api.defaultFormat);
     this.currentMode = this.currentFormat.modes[0];
     this.lobbyForm = this.fb.group({
@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
       mode: [this.currentMode, Validators.required]
     });
   }
-  
+
   @HostListener('window:resize') onResize() {
     this.updateFlexvalue();
   }
@@ -63,9 +63,9 @@ export class HomeComponent implements OnInit {
 
   createLobby() {
     if (this.valid()) {
-      let new_lobby = new Lobby();
+      const new_lobby = new Lobby();
       new_lobby.remaining_maps = this.api.mapList.filter(x => x.picked);
-      new_lobby.actions = this.currentMode.actions.map((x, indice) => new MapActionResult(x, (indice%2 === 0 ? TeamSide.A : TeamSide.B)));
+      new_lobby.actions = this.currentMode.actions.map((x, indice) => new MapActionResult(x, (indice % 2 === 0 ? TeamSide.A : TeamSide.B)));
       new_lobby.nameTeamA = this.lobbyForm.get('team1').value;
       new_lobby.nameTeamB = this.lobbyForm.get('team2').value;
       this.api.createLobby(new_lobby)
