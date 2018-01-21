@@ -9,7 +9,7 @@ import { Map, MapAction, Format, Mode, Lobby, MapActionResult, TeamSide } from '
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
 
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   valid(): boolean {
-    return this.lobbyForm.valid && this.validMapList();
+    return this.lobbyForm.valid && this.validMapList() && this.currentMode.actions.length > 0;
   }
 
   ngOnInit() {

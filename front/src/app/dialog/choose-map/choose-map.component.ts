@@ -5,14 +5,14 @@ import { MapAction, Map } from '../../types/types';
 @Component({
   selector: 'app-choose-map',
   templateUrl: './choose-map.component.html',
-  styleUrls: ['./choose-map.component.scss']
+  styleUrls: ['./choose-map.component.css']
 })
 export class ChooseMapComponent implements OnInit {
 
   action: MapAction;
   maps: Map[] = [];
 
-  constructor(public dialogRef: MatDialogRef<ChooseMapComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { 
+  constructor(public dialogRef: MatDialogRef<ChooseMapComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.action = data.action;
     this.maps = data.maps;
   }

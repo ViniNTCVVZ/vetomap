@@ -12,7 +12,7 @@ import { InfoDialogComponent } from './dialog/info-dialog/info-dialog.component'
 export class AppComponent {
   dialogRef: any;
 
-  constructor(private dialog: MatDialog, private app: AppService) { 
+  constructor(private dialog: MatDialog, private app: AppService) {
     this.app.onError.subscribe( err => {
       this.dialogRef = this.dialog.open(InfoDialogComponent, {
         width: '600px',
@@ -22,6 +22,6 @@ export class AppComponent {
   }
 
   openDialog(): void {
-    
+
   }
 }
