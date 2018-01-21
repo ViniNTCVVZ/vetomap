@@ -30,6 +30,13 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnInit() {
+    // if the first action is random pick, call vote on API.
+    if (this.api.current_lobby.actions[0].action === MapAction.Random) {
+      this.api.voteForMap(null)
+      .catch(err => {
+        this.app.onError.next(err);
+      });
+    }
   }
 
   myturn(action: MapActionResult, index: number): boolean {

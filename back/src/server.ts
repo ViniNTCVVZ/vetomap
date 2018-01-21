@@ -140,10 +140,16 @@ wss.on('connection', (ws: WebSocket | any) => {
                             ws.send(JSON.stringify(new Response(null, "This map has already been voted")));
                         } else {
                             let action = lobby.actions[action_index];
-                            let chosen_map_index = lobby.remaining_maps.findIndex((x: Map) => x.name === map.name);
-                            if (chosen_map_index != -1) {
-                                action.map = new Map(lobby.remaining_maps[chosen_map_index].name);
-                                lobby.remaining_maps.splice(chosen_map_index, 1);
+                            let chosen_map_index = -1;
+                            if (map) {
+                                chosen_map_index = lobby.remaining_maps.findIndex((x: Map) => x.name === map.name);
+                            }
+                            // map undefined if first action is random server pick.
+                            if (!map || chosen_map_index != -1) {
+                                if (map) {
+                                    action.map = new Map(lobby.remaining_maps[chosen_map_index].name);
+                                    lobby.remaining_maps.splice(chosen_map_index, 1);
+                                }
 
                                 // picking random map if next_action is random
                                 let next_action = lobby.actions.find((x: MapActionResult) => x.map.name === '');
